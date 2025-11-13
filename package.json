@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --coverage",
     "start": "node app.js",
     "migration:create": "npx sequelize-cli db:create",
     "migration:run": "npx sequelize-cli db:migrate",
