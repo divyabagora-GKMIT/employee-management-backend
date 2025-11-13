@@ -69,9 +69,6 @@ npm start
 
 http://localhost:your-port
 
-
-
-
 ## How to Test the Application
 ### Run All tests:
     npm test 
