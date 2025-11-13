@@ -8,9 +8,14 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "start": "node app.js",
-    "migration:create": "npx sequelize-cli db:create",
+    "dev": "nodemon app.js",
+    "migration:generate": "npx sequelize-cli migration:generate --name",
     "migration:run": "npx sequelize-cli db:migrate",
-    "migration:rollback": "npx sequelize-cli db:migrate:undo"
+    "migration:rollback": "npx sequelize-cli db:migrate:undo",
+    "seed:one": "npx sequelize-cli db:seed --seed",
+    "seed:all": "npx sequelize-cli db:seed:all"
+
+
   },
   "keywords": [],
   "author": "",

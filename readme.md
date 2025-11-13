@@ -50,23 +50,24 @@ git clone https://github.com/divyabagora-GKMIT/employee-management-backend
 npm install
 
 ### 3. Configure .env file
-PORT=3000
-DB_HOST=localhost
-DB_USER=your_postgres_user 
-DB_PASSWORD=your_db_password
-DB_NAME=employee_management_system
-DB_DIALECT=postgres
+- PORT=3000
+- DB_HOST=localhost
+- DB_USER=your_postgres_user 
+- DB_PASS=your_db_password
+- DB_NAME=employee_management_system
+- DB_DIALECT=postgres
 
 ### 4. Setup Database
-npx sequelize-cli db:create
-npx sequelize-cli db:migrate
-npx sequelize-cli db:seed:all
+- npx sequelize-cli migration:generate --name
+- npx sequelize-cli db:migrate
+- npx sequelize-cli db:seed:all
 
 ## Run the project 
 npm start
 
 ### Once the server is running, open your browser or Postman and visit
-http://localhost:3000
+
+http://localhost:your-port
 
 
 
