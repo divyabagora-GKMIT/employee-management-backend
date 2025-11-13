@@ -71,8 +71,8 @@ http://localhost:your-port
 
 ## How to Test the Application
 ### Run All tests:
-    npm test 
+npm test 
 
 ### View Code Coverage:
-    npm coverage
+npm coverage
 
