@@ -7,25 +7,25 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('roles', {
        id: {
-              type: DataTypes.INTEGER,
+              type: Sequelize.INTEGER,
               primaryKey: true,
               autoIncrement: true
           },
           name: {
-              type: DataTypes.STRING(50),
+              type: Sequelize.STRING(50),
               allowNull: false,
               unique: true
           },
           created_at: {
-              type: DataTypes.DATE,
-              defaultValue: DataTypes.NOW,
+              type: 'TIMESTAMPTZ',
+              defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
           },
           updated_at: {
-              type: DataTypes.DATE,
-              defaultValue: DataTypes.NOW,
+              type: 'TIMESTAMPTZ',
+              defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
           },
           deleted_at: {
-              type: DataTypes.DATE,
+              type: 'TIMESTAMPTZ',
           },
     });
   },

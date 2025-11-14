@@ -59,17 +59,6 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "roles", key: "id"
       }
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
     }
   }, {
     sequelize,
