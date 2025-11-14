@@ -30,13 +30,13 @@ const createUser = async (req, res, next) => {
         })
     }
 }
-const viewUsers = async (req,res,next) => {
+const viewUsers = async (req, res, next) => {
     try {
         const result = await userService.viewUsers();
 
-        if (!result.success){
+        if (!result.success) {
             return res.status(400).json({
-                success : false,
+                success: false,
                 message: "Internal server error"
             })
         }
@@ -48,8 +48,8 @@ const viewUsers = async (req,res,next) => {
         })
     } catch (error) {
         res.status(400).json({
-            success : false,
-            message : error.message
+            success: false,
+            message: error.message
         })
     }
 }
@@ -59,23 +59,50 @@ const updateUser = async (req, res, next) => {
     const userId = req.params.id;
 
     try {
-      const result = await userService.updateUser(userId, body);
+        const result = await userService.updateUser(userId, body);
 
-      if (!result.success){
-        return res.send(400).json({
-            success : false,
-            message: result.message
-        })
-      }
+        if (!result.success) {
+            return res.send(400).json({
+                success: false,
+                message: result.message
+            })
+        }
 
-       return res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: result.message,
             data: result.data
         });
-       
+
     } catch (error) {
-       return res.status(500).json({
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
+const deleteUser = async (req, res, next) => {
+    const userId = req.params.id;
+
+    try {
+        const result = await userService.deleteUser(userId);
+        
+        if (!result.success) {
+            return res.status(400).json({
+                success: false,
+                message: result.message
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "User deleted successfully "
+        });
+
+    } catch (error) {
+        return res.status(500).json({
             success: false,
             message: "Internal server error",
             error: error.message
@@ -86,5 +113,6 @@ const updateUser = async (req, res, next) => {
 module.exports = {
     createUser,
     viewUsers,
-    updateUser
+    updateUser,
+    deleteUser
 }

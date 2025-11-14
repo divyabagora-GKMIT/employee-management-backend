@@ -1,5 +1,6 @@
 const { Role, User } = require("../models");
 const bcrypt = require("bcrypt");
+const { Sequelize } = require("sequelize");
 const createUser = async (payload) => {
     const { name,
         email,
@@ -95,8 +96,33 @@ const updateUser = async (userId, payload) => {
 }
 
 
+const deleteUser = async (userId, payload) => {
+    try {
+        const user = await User.findByPk(userId);
+        console.log(user);
+
+        if (!user) {
+            return {
+                success: false,
+                message: "User not found"
+            }
+        }
+
+        await user.destroy();
+        // soft delete function when paranoid is true
+
+        return {
+            success: true,
+            message: "User deleted successfully",
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
     viewUsers,
-    updateUser
+    updateUser,
+    deleteUser
 }
