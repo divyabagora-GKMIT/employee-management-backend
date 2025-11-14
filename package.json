@@ -15,12 +15,13 @@
     "migration:rollback": "npx sequelize-cli db:migrate:undo",
     "seed:one": "npx sequelize-cli db:seed --seed",
     "seed:all": "npx sequelize-cli db:seed:all"
-
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "pg": "^8.16.3",
