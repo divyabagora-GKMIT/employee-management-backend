@@ -51,6 +51,25 @@ const createUser = async (payload) => {
     }
 }
 
+const viewUsers = async (req, res, next) => {
+    try {
+        const users = await User.findAll({
+            attributes: {
+                exclude: ["password", "created_at", "updated_at", "deleted_at"]
+            }
+        });
+        console.log(users);
+
+        return {
+            success: true,
+            data: users
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
+    viewUsers
 }

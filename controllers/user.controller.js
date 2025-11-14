@@ -30,7 +30,31 @@ const createUser = async (req, res, next) => {
         })
     }
 }
+const viewUsers = async (req,res,next) => {
+    try {
+        const result = await userService.viewUsers();
+
+        if (!result.success){
+            return res.status(400).json({
+                success : false,
+                message: "Internal server error"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Data fetch successfully",
+            data: result.data
+        })
+    } catch (error) {
+        res.status(400).json({
+            success : false,
+            message : error.message
+        })
+    }
+}
 
 module.exports = {
     createUser,
+    viewUsers
 }
