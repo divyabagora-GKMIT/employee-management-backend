@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend service for the Employee Management System, providing APIs for authentication, employee data management, department management and project management.",
   "main": "app.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
