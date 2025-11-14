@@ -69,7 +69,34 @@ const viewUsers = async (req, res, next) => {
     }
 }
 
+
+const updateUser = async (userId, payload) => {
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return {
+                success: false,
+                message: "User not found"
+            }
+        }
+
+        const updatedUser = await User.update(payload, {
+            where: { id: userId }
+        });
+
+        return {
+            success: true,
+            message: "User updated successfully",
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 module.exports = {
     createUser,
-    viewUsers
+    viewUsers,
+    updateUser
 }

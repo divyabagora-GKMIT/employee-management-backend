@@ -54,7 +54,37 @@ const viewUsers = async (req,res,next) => {
     }
 }
 
+const updateUser = async (req, res, next) => {
+    const body = req.body;
+    const userId = req.params.id;
+
+    try {
+      const result = await userService.updateUser(userId, body);
+
+      if (!result.success){
+        return res.send(400).json({
+            success : false,
+            message: result.message
+        })
+      }
+
+       return res.status(200).json({
+            success: true,
+            message: result.message,
+            data: result.data
+        });
+       
+    } catch (error) {
+       return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     createUser,
-    viewUsers
+    viewUsers,
+    updateUser
 }
