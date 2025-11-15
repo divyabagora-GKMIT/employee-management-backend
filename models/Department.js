@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Department extends Model {
     static associate(models) {
      Department.belongsToMany(models.User, {
-        through: models.UserDepartments,
+        through: models.DepartmentMembers,
         foreignKey: 'department_id',
         otherKey: 'user_id',
         as: 'users'

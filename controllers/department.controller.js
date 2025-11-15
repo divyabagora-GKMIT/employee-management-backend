@@ -1,27 +1,28 @@
-const { userService } = require("../services")
+const { departmentService } = require("../services");
 
-const createUser = async (req, res, next) => {
-    
+const createDepartment = async (req, res, next) => {
     try {
-        const body = req.body;
-        if (!body.name || !body.email || !body.password || !body.role_id) {
-            return res.status(400).json({
+        const { name } = req.body;
+        if (!name) {
+            return res.status(422).json({
                 success: false,
-                message: "Enter the required fields"
+                message: "Provide required fields"
             })
         }
-        const result = await userService.createUser(body);
+        const result = await departmentService.createDepartment(req.body);
         if (!result.success) {
             return res.status(result.statusCode).json({
-                success: false,
-                message: result.message
-            });
+                success: result.success,
+                message: result.message,
+            })
         }
+
         return res.status(result.statusCode).json({
-            success: true,
+            success: result.success,
             message: result.message,
             data: result.data
         })
+
     } catch (error) {
         return res.status(400).json({
             success: false,
@@ -29,10 +30,10 @@ const createUser = async (req, res, next) => {
         })
     }
 }
-const viewUsers = async (req, res, next) => {
-    try {
-        const result = await userService.viewUsers();
 
+const viewDepartments = async (req, res, next) => {
+    try {
+        const result = await departmentService.viewDepartments();
         if (!result.success) {
             return res.status(result.statusCode).json({
                 success: false,
@@ -42,7 +43,7 @@ const viewUsers = async (req, res, next) => {
 
         return res.status(result.statusCode).json({
             success: true,
-            message: "Data fetch successfully",
+            message: result.message,
             data: result.data
         })
     } catch (error) {
@@ -53,51 +54,19 @@ const viewUsers = async (req, res, next) => {
     }
 }
 
-const updateUser = async (req, res, next) => {
-
+const deleteDepartment = async (req, res, next) => {
     try {
-        const body = req.body;
-        const userId = req.params.id;
-        const result = await userService.updateUser(userId, body);
-
-        if (!result.success) {
-            return res.status(result.statusCode).json({
-                success: false,
-                message: result.message
-            })
-        }
-
-        return res.status(result.statusCode).json({
-            success: true,
-            message: result.message,
-            data: result.data
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error",
-            error: error.message
-        });
-    }
-}
-
-const deleteUser = async (req, res, next) => {
-    const userId = req.params.id;
-
-    try {
-        const result = await userService.deleteUser(userId);
-        
+        const deptId = req.params.id;
+        const result = await departmentService.deleteDepartment(deptId);
         if (!result.success) {
             return res.status(result.statusCode).json({
                 success: false,
                 message: result.message
             });
         }
-
         return res.status(result.statusCode).json({
             success: true,
-            message: "User deleted successfully "
+            message: result.message
         });
 
     } catch (error) {
@@ -109,9 +78,41 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
+const updateDepartment = async(req,res,next) => {
+    try {
+        const {name} = req.body;
+        const deptId = req.params.id
+        if (!name){
+            res.status(422).json({
+                success : false,
+                message: "Nothing to Update"
+            })
+        }
+
+        const result = await departmentService.updateDepartment(deptId,req.body);
+        if (!result.success){
+            return res.status(result.statusCode).json({
+                success : result.success,
+                message : result.message
+            })
+        }
+
+        return res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+ 
 module.exports = {
-    createUser,
-    viewUsers,
-    updateUser,
-    deleteUser
+    createDepartment,
+    viewDepartments,
+    deleteDepartment,
+    updateDepartment
 }
