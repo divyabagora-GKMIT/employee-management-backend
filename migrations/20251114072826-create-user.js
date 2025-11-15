@@ -63,7 +63,6 @@ module.exports = {
       },
       deleted_at: {
         type: 'TIMESTAMPTZ',
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
 
     });
