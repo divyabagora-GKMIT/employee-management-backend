@@ -1,11 +1,10 @@
 const { userService } = require("../services")
 
 const createUser = async (req, res, next) => {
-    const body = req.body;
-
+    
     try {
+        const body = req.body;
         if (!body.name || !body.email || !body.password || !body.role_id) {
-            console.log("Please provide the required data");
             return res.status(400).json({
                 success: false,
                 message: "Enter the required fields"
@@ -13,12 +12,12 @@ const createUser = async (req, res, next) => {
         }
         const result = await userService.createUser(body);
         if (!result.success) {
-            return res.status(400).json({
+            return res.status(result.statusCode).json({
                 success: false,
                 message: result.message
             });
         }
-        return res.status(201).json({
+        return res.status(result.statusCode).json({
             success: true,
             message: result.message,
             data: result.data
@@ -35,13 +34,13 @@ const viewUsers = async (req, res, next) => {
         const result = await userService.viewUsers();
 
         if (!result.success) {
-            return res.status(400).json({
+            return res.status(result.statusCode).json({
                 success: false,
                 message: "Internal server error"
             })
         }
 
-        return res.status(200).json({
+        return res.status(result.statusCode).json({
             success: true,
             message: "Data fetch successfully",
             data: result.data
@@ -62,13 +61,13 @@ const updateUser = async (req, res, next) => {
         const result = await userService.updateUser(userId, body);
 
         if (!result.success) {
-            return res.send(400).json({
+            return res.status(result.statusCode).json({
                 success: false,
                 message: result.message
             })
         }
 
-        return res.status(200).json({
+        return res.status(result.statusCode).json({
             success: true,
             message: result.message,
             data: result.data
@@ -90,13 +89,13 @@ const deleteUser = async (req, res, next) => {
         const result = await userService.deleteUser(userId);
         
         if (!result.success) {
-            return res.status(400).json({
+            return res.status(result.statusCode).json({
                 success: false,
                 message: result.message
             });
         }
 
-        return res.status(200).json({
+        return res.status(result.statusCode).json({
             success: true,
             message: "User deleted successfully "
         });

@@ -2,7 +2,8 @@ const { Role, User } = require("../models");
 const bcrypt = require("bcrypt");
 const { Sequelize } = require("sequelize");
 const createUser = async (payload) => {
-    const { name,
+    try {
+        const { name,
         email,
         password,
         designation,
@@ -13,21 +14,18 @@ const createUser = async (payload) => {
         joining_date,
         role_id
     } = payload;
-
-    try {
-
         const userInDb = await User.findOne({
             where: { email: email }
         })
 
         if (userInDb) {
             return {
+                statusCode : 422,
                 success: false,
                 message: "User already exits"
             }
         }
 
-       
         let hashedPassword = await bcrypt.hash(password, 12);
         const newUser = await User.create({
             name,
@@ -43,9 +41,9 @@ const createUser = async (payload) => {
         })
 
         return {
+            statusCode : 201,
             success: true,
             message: "User created successfully",
-            // data: newUser
         };
     } catch (error) {
         throw error;
@@ -56,12 +54,11 @@ const viewUsers = async (req, res, next) => {
     try {
         const users = await User.findAll({
             attributes: {
-                exclude: ["password", "created_at", "updated_at", "deleted_at"]
+                exclude: ["password", "deleted_at"]
             }
         });
-        console.log(users);
-
         return {
+            statusCode : 200,
             success: true,
             data: users
         }
@@ -77,6 +74,7 @@ const updateUser = async (userId, payload) => {
 
         if (!user) {
             return {
+                statusCode : 404,
                 success: false,
                 message: "User not found"
             }
@@ -87,6 +85,7 @@ const updateUser = async (userId, payload) => {
         });
 
         return {
+            statusCode : 200,
             success: true,
             message: "User updated successfully",
         }
@@ -99,19 +98,19 @@ const updateUser = async (userId, payload) => {
 const deleteUser = async (userId, payload) => {
     try {
         const user = await User.findByPk(userId);
-        console.log(user);
 
         if (!user) {
             return {
+                statusCode : 404,
                 success: false,
                 message: "User not found"
             }
         }
 
         await user.destroy();
-        // soft delete function when paranoid is true
 
         return {
+            statusCode : 200,
             success: true,
             message: "User deleted successfully",
         }
