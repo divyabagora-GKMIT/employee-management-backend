@@ -1,6 +1,7 @@
 const {User}  = require("../models")
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { password } = require("../config/config");
 const loginUser = async(payload)=>{
     try {
         const {email , password} = payload;
@@ -46,6 +47,38 @@ const loginUser = async(payload)=>{
     }
 }
 
+const resetPassword = async(payload) => {
+    try {
+        const {email , newPassword} = payload;
+        const userInDb = await User.findOne({
+            where : {email : email},
+        });
+
+        if (!userInDb){
+            return {
+                statusCode : 404,
+                success : false,
+                message : "User not found"
+            }
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword,12);
+
+        await userInDb.update({
+            password : hashedNewPassword
+        });
+
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Password updated successfully"
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports ={
-    loginUser
+    loginUser,
+    resetPassword
 }
