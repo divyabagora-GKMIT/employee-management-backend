@@ -3,21 +3,21 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class UserDepartments extends Model {
+  class DepartmentMembers extends Model {
     
     static associate(models) {
-       UserDepartments.belongsTo(models.User, {
+       DepartmentMembers.belongsTo(models.User, {
         foreignKey: 'user_id',
         as: 'user' 
       });
 
-      UserDepartments.belongsTo(models.Department, {
+      DepartmentMembers.belongsTo(models.Department, {
         foreignKey: 'department_id',
         as: 'department' 
       });
     }
   }
-  UserDepartments.init({
+  DepartmentMembers.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'UserDepartments',
+    modelName: 'DepartmentMembers',
   });
-  return UserDepartments;
+  return DepartmentMembers;
 };

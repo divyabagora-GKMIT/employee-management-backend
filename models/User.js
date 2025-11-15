@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       User.belongsToMany(models.Department, {
-        through: models.UserDepartments,
+        through: models.DepartmentMembers,
         foreignKey: 'user_id',
         otherKey: 'department_id',
         as: 'departments' 
