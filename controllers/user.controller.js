@@ -1,4 +1,4 @@
-const { userService } = require("../services")
+const { userService, mailService} = require("../services")
 
 const createUser = async (req, res, next) => {
     
@@ -17,6 +17,13 @@ const createUser = async (req, res, next) => {
                 message: result.message
             });
         }
+
+        mailService.sendNewUserEmail({
+            to: body.email,
+            tempPassword: body.password,
+            name : body.name
+        });
+        
         return res.status(result.statusCode).json({
             success: true,
             message: result.message,

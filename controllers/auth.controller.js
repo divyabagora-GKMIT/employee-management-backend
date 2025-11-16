@@ -1,4 +1,4 @@
-const {authService} = require("../services")
+const {authService, userService} = require("../services")
 
 const loginUser = async(req,res,next)=>{
     try {
@@ -34,6 +34,33 @@ const loginUser = async(req,res,next)=>{
     }
 }
 
+const resetPassword = async(req,res,next)=>{
+    try {
+        const {email , newPassword} = req.body;
+
+        if ( !email ||  !newPassword) {
+            return res.status(400).json({
+                success : false,
+                message: "Credentials are required"
+            })
+        }
+
+        const result = await authService.resetPassword(req.body);
+
+        return res.status(result.statusCode).json({
+            success : result.success,
+            message : result.message
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success : false,
+            message : "Internal server error",
+            error: error.message
+        })
+    }
+}
+
 module.exports = {
-    loginUser
+    loginUser,
+    resetPassword
 }
