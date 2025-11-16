@@ -18,7 +18,7 @@ const createUser = async (req, res, next) => {
             });
         }
 
-         await mailService.sendNewUserEmail({
+        mailService.sendNewUserEmail({
             to: body.email,
             tempPassword: body.password,
             name : body.name

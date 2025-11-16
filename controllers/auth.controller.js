@@ -39,7 +39,7 @@ const resetPassword = async(req,res,next)=>{
         const {email , newPassword} = req.body;
 
         if ( !email ||  !newPassword) {
-            return res.status(422).json({
+            return res.status(400).json({
                 success : false,
                 message: "Credentials are required"
             })

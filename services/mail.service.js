@@ -38,13 +38,12 @@ const sendNewUserEmail = async ({ to, tempPassword, name = "Employee" }) => {
 
     try {
         await transporter.sendMail({
-            from: `"HR - Employee Management System" <${process.env.EMAIL_USER}>`,
+            from: `<${process.env.EMAIL_USER}>`,
             to,
             subject,
             html,
         });
 
-        console.log(`Email sent successfully to ${to}`);
         return {
             success: true,
             statusCode : 201,
