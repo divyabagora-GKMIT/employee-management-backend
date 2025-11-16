@@ -82,7 +82,39 @@ const getDepartmentByUserID = async (userId) => {
     }
 }
 
+const deleteMemberFromDepartment = async (payload) =>{
+    try {
+        const {department_id , user_id} = payload;
+
+        const memberInDepartment = await DepartmentMembers.findOne({
+            where : {
+                user_id: user_id,
+                department_id : department_id
+            }
+        })
+
+        if (!memberInDepartment){
+             return {
+                statusCode : 422,
+                success: false,
+                message : "This member not found in this department"
+            }
+        }
+
+         await memberInDepartment.destroy();
+
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Member successfully removed from the department",
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     assignDepartment,
-    getDepartmentByUserID
+    getDepartmentByUserID,
+    deleteMemberFromDepartment
 }

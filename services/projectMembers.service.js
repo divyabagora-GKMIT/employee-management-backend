@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { ProjectMembers } = require("../models");
 const { Project } = require("../models")
 
@@ -82,8 +83,76 @@ const getProjectByUserId = async (userId) => {
         throw error;
     }
 }
+const updateProjectRole = async (payload) => {
+    try {
+        const {user_id, project_id, project_role} = payload;
+
+        const projectRoleInDb = await ProjectMembers.findOne({
+            where : {
+                user_id,
+                project_id
+            }
+        })
+
+        if (!projectRoleInDb){
+            return {
+                statusCode : 422,
+                success: false,
+                message : "This user not found in this project"
+            }
+        }
+
+        const updatedRole = await projectRoleInDb.update({
+            project_role : project_role
+        })
+
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Project role updated successfully",
+            data: updatedRole 
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+const deleteProjectMember = async(payload) => {
+    try {
+        const {project_id , user_id} = payload;
+
+        const projectMemberInDb = await ProjectMembers.findOne({
+            where : {
+                user_id: user_id,
+                project_id : project_id
+            }
+        })
+
+        if (!projectMemberInDb){
+            return {
+                statusCode : 422,
+                success: false,
+                message : "This user not found in this project"
+            }
+        }
+
+        await projectMemberInDb.destroy();
+
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Member successfully removed from the project",
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     assignProject,
-    getProjectByUserId
+    getProjectByUserId,
+    updateProjectRole,
+    deleteProjectMember
 }

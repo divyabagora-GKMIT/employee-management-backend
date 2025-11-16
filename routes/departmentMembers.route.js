@@ -2,7 +2,7 @@ const express = require("express");
 const {departmentMembersController} = require("../controllers")
 const router = express.Router();
 
-router.post("/department",departmentMembersController.assignDepartment);
-router.get("/getDepartment/:id",departmentMembersController.getDepartmentByUserId);
-
+router.post("/",departmentMembersController.assignDepartment);
+router.get("/:id",departmentMembersController.getDepartmentByUserId);
+router.delete("/departments/:id1/members/:id2",departmentMembersController.deleteMemberFromDepartment)
 module.exports = router;
