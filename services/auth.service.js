@@ -7,7 +7,7 @@ const loginUser = async(payload)=>{
         const {email , password} = payload;
         const userInDb = await User.findOne({
             where : {email : email},
-            attributes: ['id', 'email', 'password','role_id']
+            attributes: ['id', 'email', 'password','role_id','status']
         });
         if (!userInDb){
             return {
@@ -26,11 +26,12 @@ const loginUser = async(payload)=>{
                 message : "Invalid Password"
             }
         }
-
+    
         const token = jwt.sign({
             id: userInDb.id,
             email: userInDb.email,
-            role: userInDb.role_id
+            role: userInDb.role_id,
+            status: userInDb.status
         },process.env.JWT_SECRET,{
             expiresIn:"2d"
         })
@@ -65,7 +66,8 @@ const resetPassword = async(payload) => {
         const hashedNewPassword = await bcrypt.hash(newPassword,12);
 
         await userInDb.update({
-            password : hashedNewPassword
+            password : hashedNewPassword,
+            status: "active"
         });
 
         return {
