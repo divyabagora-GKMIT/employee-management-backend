@@ -1,6 +1,6 @@
 const { where } = require("sequelize");
 const { ProjectMembers } = require("../models");
-const { Project } = require("../models")
+const { Project, User } = require("../models")
 
 const assignProject = async (payload) => {
     try {
@@ -58,8 +58,9 @@ const getProjectByUserId = async (userId) => {
             include: [
                 {
                     model: Project,
-                    as: "project",       
-                    attributes: ["id", "name"]
+                    as: "project",
+                    attributes: ["id", "name"],
+                    paranoid: false
                 }
             ]
         });
@@ -83,34 +84,67 @@ const getProjectByUserId = async (userId) => {
         throw error;
     }
 }
+
+const getUsersByProjectId = async (projectId) => {
+    try {
+        const membersInProject = await ProjectMembers.findAll({
+            where: { project_id: projectId },
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ["id", "name"],
+                    paranoid: false
+                }
+            ]
+        })
+
+        if (!membersInProject.length) {
+            return {
+                statusCode: 404,
+                success: false,
+                message: "No members in this project"
+            };
+        }
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Members fetched successfully",
+            data: membersInProject
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
 const updateProjectRole = async (payload) => {
     try {
-        const {user_id, project_id, project_role} = payload;
+        const { user_id, project_id, project_role } = payload;
 
         const projectRoleInDb = await ProjectMembers.findOne({
-            where : {
+            where: {
                 user_id,
                 project_id
             }
         })
 
-        if (!projectRoleInDb){
+        if (!projectRoleInDb) {
             return {
-                statusCode : 422,
+                statusCode: 422,
                 success: false,
-                message : "This user not found in this project"
+                message: "This user not found in this project"
             }
         }
 
         const updatedRole = await projectRoleInDb.update({
-            project_role : project_role
+            project_role: project_role
         })
 
         return {
             statusCode: 200,
             success: true,
             message: "Project role updated successfully",
-            data: updatedRole 
+            data: updatedRole
         };
 
     } catch (error) {
@@ -118,22 +152,22 @@ const updateProjectRole = async (payload) => {
     }
 }
 
-const deleteProjectMember = async(payload) => {
+const deleteProjectMember = async (payload) => {
     try {
-        const {project_id , user_id} = payload;
+        const { project_id, user_id } = payload;
 
         const projectMemberInDb = await ProjectMembers.findOne({
-            where : {
+            where: {
                 user_id: user_id,
-                project_id : project_id
+                project_id: project_id
             }
         })
 
-        if (!projectMemberInDb){
+        if (!projectMemberInDb) {
             return {
-                statusCode : 422,
+                statusCode: 422,
                 success: false,
-                message : "This user not found in this project"
+                message: "This user not found in this project"
             }
         }
 
@@ -153,6 +187,7 @@ const deleteProjectMember = async(payload) => {
 module.exports = {
     assignProject,
     getProjectByUserId,
+    getUsersByProjectId,
     updateProjectRole,
     deleteProjectMember
 }
