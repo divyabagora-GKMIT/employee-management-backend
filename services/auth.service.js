@@ -7,7 +7,7 @@ const loginUser = async(payload)=>{
         const {email , password} = payload;
         const userInDb = await User.findOne({
             where : {email : email},
-            attributes: ['id', 'email', 'password','role_id','status']
+            attributes: ['id', 'email', 'name','password','role_id','status']
         });
         if (!userInDb){
             return {
@@ -30,6 +30,7 @@ const loginUser = async(payload)=>{
         const token = jwt.sign({
             id: userInDb.id,
             email: userInDb.email,
+            name: userInDb.name,
             role: userInDb.role_id,
             status: userInDb.status
         },process.env.JWT_SECRET,{
