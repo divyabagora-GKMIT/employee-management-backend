@@ -1,5 +1,5 @@
-const {DepartmentMembers} = require("../models");
-const {Department} = require("../models");
+const { DepartmentMembers } = require("../models");
+const { Department, User } = require("../models");
 
 const assignDepartment = async (payload) => {
     try {
@@ -56,7 +56,7 @@ const getDepartmentByUserID = async (userId) => {
             include: [
                 {
                     model: Department,
-                    as: "department",       
+                    as: "department",
                     attributes: ["id", "name"]
                 }
             ]
@@ -82,26 +82,57 @@ const getDepartmentByUserID = async (userId) => {
     }
 }
 
-const deleteMemberFromDepartment = async (payload) =>{
+const getUsersByDepartmentId = async (deptId) => {
     try {
-        const {department_id , user_id} = payload;
+        const membersAssign = await DepartmentMembers.findAll({
+            where: { department_id: deptId },
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                    attributes: ["id", "name"]
+                }
+            ]
+        })
+         if (!membersAssign.length) {
+            return {
+                statusCode: 404,
+                success: false,
+                message: "Department has no members"
+            };
+        }
+
+        return {
+            statusCode: 200,
+            success: true,
+            message: "Members fetched successfully",
+            data: membersAssign
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+const deleteMemberFromDepartment = async (payload) => {
+    try {
+        const { department_id, user_id } = payload;
 
         const memberInDepartment = await DepartmentMembers.findOne({
-            where : {
+            where: {
                 user_id: user_id,
-                department_id : department_id
+                department_id: department_id
             }
         })
 
-        if (!memberInDepartment){
-             return {
-                statusCode : 422,
+        if (!memberInDepartment) {
+            return {
+                statusCode: 422,
                 success: false,
-                message : "This member not found in this department"
+                message: "This member not found in this department"
             }
         }
 
-         await memberInDepartment.destroy();
+        await memberInDepartment.destroy();
 
         return {
             statusCode: 200,
@@ -116,5 +147,6 @@ const deleteMemberFromDepartment = async (payload) =>{
 module.exports = {
     assignDepartment,
     getDepartmentByUserID,
+    getUsersByDepartmentId,
     deleteMemberFromDepartment
 }

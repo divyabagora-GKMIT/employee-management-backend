@@ -57,13 +57,37 @@ const getProjectByUserId = async (req, res, next) => {
     }
 }
 
-const updateProjectRole = async(req,res,next) => {
+const getUsersByProjectId = async (req, res, next) => {
     try {
-        const project_id  = req.params.id1;
-        const user_id = req.params.id2;
-        const {project_role} = req.body;
+        const projectId = req.params.id;
+        const result = await projectMembersService.getUsersByProjectId(projectId);
+        if (!result.success) {
+            return res.status(result.statusCode).json({
+                success: result.success,
+                message: result.message,
+            });
+        }
 
-        const result = await projectMembersService.updateProjectRole({project_id, user_id, project_role});
+        return res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message,
+            data: result.data,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+const updateProjectRole = async (req, res, next) => {
+    try {
+        const project_id = req.params.id1;
+        const user_id = req.params.id2;
+        const { project_role } = req.body;
+
+        const result = await projectMembersService.updateProjectRole({ project_id, user_id, project_role });
 
         if (!result.success) {
             return res.status(result.statusCode).json({
@@ -87,13 +111,13 @@ const updateProjectRole = async(req,res,next) => {
     }
 }
 
-const deleteProjectMember = async(req,res,next) => {
+const deleteProjectMember = async (req, res, next) => {
     try {
-        const project_id  = req.params.id1;
+        const project_id = req.params.id1;
         const user_id = req.params.id2;
 
-        const result = await projectMembersService.deleteProjectMember({project_id,user_id});
-         if(!result.success) {
+        const result = await projectMembersService.deleteProjectMember({ project_id, user_id });
+        if (!result.success) {
             return res.status(result.statusCode).json({
                 success: result.success,
                 message: result.message,
@@ -115,6 +139,7 @@ const deleteProjectMember = async(req,res,next) => {
 module.exports = {
     assignProject,
     getProjectByUserId,
+    getUsersByProjectId,
     updateProjectRole,
     deleteProjectMember
 };
