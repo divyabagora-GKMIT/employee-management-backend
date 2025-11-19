@@ -57,14 +57,38 @@ const getDepartmentByUserId = async (req, res, next) => {
     }
 }
 
-const deleteMemberFromDepartment = async(req,res,next)=>{
+const getUsersByDepartmentId = async (req, res, next) => {
+    try {
+        const deptId = req.params.id;
+        const result = await departmentMembersService.getUsersByDepartmentId(deptId);
+        if (!result.success) {
+            return res.status(result.statusCode).json({
+                success: result.success,
+                message: result.message,
+            });
+        }
+
+        return res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message,
+            data: result.data,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+const deleteMemberFromDepartment = async (req, res, next) => {
     try {
         const department_id = req.params.id1;
         const user_id = req.params.id2;
 
-        const result = await departmentMembersService.deleteMemberFromDepartment({department_id,user_id});
+        const result = await departmentMembersService.deleteMemberFromDepartment({ department_id, user_id });
 
-        if(!result.success) {
+        if (!result.success) {
             return res.status(result.statusCode).json({
                 success: result.success,
                 message: result.message,
@@ -87,5 +111,6 @@ const deleteMemberFromDepartment = async(req,res,next)=>{
 module.exports = {
     assignDepartment,
     getDepartmentByUserId,
+    getUsersByDepartmentId,
     deleteMemberFromDepartment
 }
