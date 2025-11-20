@@ -12,12 +12,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/api/users",userRoute);
-app.use("/api/departments",departmentRoute);
-app.use("/api/projects",projectRoute);
-app.use("/api/auth",authRoute);
-app.use("/api/project-members",projectMemberRoute);
-app.use("/api/department-members",departmentMemberRoute)
+app.use("/api/users", userRoute);
+app.use("/api/departments", departmentRoute);
+app.use("/api/projects", projectRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/project-members", projectMemberRoute);
+app.use("/api/department-members", departmentMemberRoute)
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
