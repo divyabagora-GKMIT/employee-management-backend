@@ -1,0 +1,40 @@
+{
+  "name": "employee-management-backend",
+  "version": "1.0.0",
+  "description": "Backend service for the Employee Management System, providing APIs for authentication, employee data management, department management and project management.",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "migration:create": "npx sequelize-cli migration:create --name",
+    "migration:generate": "npx sequelize-cli migration:generate --name",
+    "migration:run": "npx sequelize-cli db:migrate",
+    "migration:rollback": "npx sequelize-cli db:migrate:undo",
+    "seed:one": "npx sequelize-cli db:seed --seed",
+    "seed:all": "npx sequelize-cli db:seed:all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.10",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "prettier": "^3.6.2",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.3",
+    "supertest": "^7.1.4"
+  }
+}
