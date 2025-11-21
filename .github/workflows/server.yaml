@@ -1,8 +1,8 @@
-name: Deploy to EC2 (Development Branch)
+name: Deploy to EC2 (staging Branch)
 on:
   push:
     branches:
-      - development
+      - staging
 jobs:
   deploy:
     runs-on: ubuntu-latest
