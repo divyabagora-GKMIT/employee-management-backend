@@ -21,7 +21,7 @@ const createDepartment = async(payload)=> {
 
         console.log(newDepartment);
         return {
-            statusCode : 200,
+            statusCode : 201,
             success :true,
             message: "Department created successfully",
             data: newDepartment

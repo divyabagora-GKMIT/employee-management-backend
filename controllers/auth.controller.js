@@ -1,20 +1,20 @@
-const {authService, userService} = require("../services")
+const { authService, userService } = require("../services")
 
-const loginUser = async(req,res,next)=>{
+const loginUser = async (req, res, next) => {
     try {
-        const {email , password} = req.body;
-        if (!email || !password){
+        const { email, password } = req.body;
+        if (!email || !password) {
             return res.status(422).json({
-                success :false,
+                success: false,
                 message: "Credentials are required"
             })
         }
 
         const result = await authService.loginUser(req.body);
 
-        if (!result.success){
+        if (!result.success) {
             return res.status(result.statusCode).json({
-                success : result.success,
+                success: result.success,
                 message: result.message
             })
         }
@@ -27,34 +27,41 @@ const loginUser = async(req,res,next)=>{
 
     } catch (error) {
         return res.status(500).json({
-            success : false,
+            success: false,
             message: "Internal server error",
             error: error.message
         })
     }
 }
 
-const resetPassword = async(req,res,next)=>{
+const resetPassword = async (req, res, next) => {
     try {
-        const {email , newPassword} = req.body;
+        const { email, newPassword } = req.body;
 
-        if ( !email ||  !newPassword) {
+        if (!email || !newPassword) {
             return res.status(400).json({
-                success : false,
+                success: false,
                 message: "Credentials are required"
             })
+        }
+
+        if (body.password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 6 characters long",
+            });
         }
 
         const result = await authService.resetPassword(req.body);
 
         return res.status(result.statusCode).json({
-            success : result.success,
-            message : result.message
+            success: result.success,
+            message: result.message
         })
     } catch (error) {
         return res.status(500).json({
-            success : false,
-            message : "Internal server error",
+            success: false,
+            message: "Internal server error",
             error: error.message
         })
     }

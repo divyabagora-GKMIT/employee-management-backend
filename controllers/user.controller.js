@@ -1,7 +1,8 @@
-const { userService, mailService} = require("../services")
+const { userService, mailService } = require("../services")
+const validator = require("validator");
 
 const createUser = async (req, res, next) => {
-    
+
     try {
         const body = req.body;
         if (!body.name || !body.email || !body.password || !body.role_id) {
@@ -9,6 +10,13 @@ const createUser = async (req, res, next) => {
                 success: false,
                 message: "Enter the required fields"
             })
+        }
+
+        if (!validator.isEmail(body.email)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email format",
+            });
         }
         const result = await userService.createUser(body);
         if (!result.success) {
@@ -21,9 +29,9 @@ const createUser = async (req, res, next) => {
         mailService.sendNewUserEmail({
             to: body.email,
             tempPassword: body.password,
-            name : body.name
+            name: body.name
         });
-        
+
         return res.status(result.statusCode).json({
             success: true,
             message: result.message,
@@ -94,7 +102,7 @@ const deleteUser = async (req, res, next) => {
 
     try {
         const result = await userService.deleteUser(userId);
-        
+
         if (!result.success) {
             return res.status(result.statusCode).json({
                 success: false,
