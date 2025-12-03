@@ -19,7 +19,7 @@ const loginUser = async(req,res,next)=>{
             })
         }
 
-        return res.status(res.statusCode).json({
+        return res.status(result.statusCode).json({
             success : result.success,
             message: result.message,
             token: result.token
